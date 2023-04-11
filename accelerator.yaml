@@ -10,22 +10,26 @@ accelerator:
     - name: groupId
       inputType: text
       defaultValue: "com.example"
-      label: Maven group name
+      label: Maven Group Name
+      description: "The name of the workload/project that will be created. The spring.application.name will also reflect this option."
       required: true
     - name: packageName
       inputType: text
       defaultValue: "com.example.tanzu.streamtemplate"
-      label: Service root package name  
+      label: Service Root Package Name  
+      description: "The base Java package name used for the application."      
       required: true
     - name: mainClassName
       inputType: text
       defaultValue: "StreamApplication"
-      label: Application main class name
+      label: Application Main Class Name
+      description: "The name of class that will be used as the SpringBoot main class."           
       required: true      
     - name: objectModelClassName
       inputType: text
       defaultValue: "Foo"
-      label: Class name of the event stream model object.
+      label: Model Class Name
+      description: "The name of class that will be used for the model object that implements the event passed between services."           
       required: true  
     - label: Event Source
       description: "If checked, the generated application will contain code to function as an event source."
@@ -48,34 +52,39 @@ accelerator:
       inputType: checkbox
       dataType: boolean
       required: true                 
-    - name: sourceChannel
+    - label: Event Source Channel
+      name: sourceChannel
       inputType: text
       defaultValue: "foo-source"
-      label: Name of the source channel that flows from the producer to the processor.  Needed if the application functions as an event source or processor.
+      description: Name of the source channel that flows from the producer to the processor.  Needed if the application functions as an event source or processor.
       required: true   
-    - name: sourceChannelGroup
+    - label: Event Source Channel Group    
+      name: sourceChannelGroup
       inputType: text
       defaultValue: "foo-source-group"
-      label: Name of the source channel group.  Needed if the application functions as an event processor.
+      description: Name of the source channel group.  Needed if the application functions as an event processor.
       required: true 
       dependsOn: 
-        name: eventProcessRole             
-    - name: resultChannel
+        name: eventProcessRole    
+    - label: Event Result Channel         
+      name: resultChannel
       inputType: text
       defaultValue: "foo-result"
-      label: Name of the result chanel that flows from the processor to the sink.   Needed if the application functions as an event processor or sink.
-      required: true     
-    - name: resultChannelGroup
+      description: Name of the result chanel that flows from the processor to the sink.   Needed if the application functions as an event processor or sink.
+      required: true  
+    - label: Event Result Channel Group   
+      name: resultChannelGroup
       inputType: text
       defaultValue: "foo-result-group"
-      label: Name of the result chanel group.  Needed if the application functions as an event processor or sink.
+      description: Name of the result chanel group.  Needed if the application functions as an event processor or sink.
       required: true    
       dependsOn: 
-        name: eventSinkRole      
-    - name: msgBrokerName
+        name: eventSinkRole    
+    - label: Message Broker Name       
+      name: msgBrokerName
       inputType: text
       defaultValue: "streamTemplateMessageBroker"
-      label: The name of the message broker to connect to for sending and receiving events.
+      description: The name of the message broker to connect to for sending and receiving events.
       required: true                              
   imports:  
   - name: live-update
