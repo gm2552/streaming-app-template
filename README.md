@@ -27,8 +27,7 @@ The application accelerator generates a starter project based on selected config
 * **Event Source Channel Group:** If the application is an event processor, this is the name of the messaging group for the source event object. 
 * **Event Result Channel:** If the application is an event processor or sink, this is the name of the messaging channel for the processing result object. 
 * **Event Result Channel Group:** If the application is an event sink, this is the name of the messaging group for the processing result object. 
-* **Message Broker Name:** The name of the message broker that will be used for service binding.  This is generally the name of a `ResourceClaim` or `ClassClaim`. 
-* **Source Image Repository:** When TAP IDE support is checked, this is the source image repository name populated into the Tiltfile. Exmaple format <registryServerName>/<repositoryName>
+* **Message Broker Name:** The name of the message broker that will be used for service binding.  This is generally the name of a `ClassClaim`. 
 
 ## Project Layout
 
@@ -54,3 +53,29 @@ pom.xml
 By default, the source application generates a new event using a `PollableBean` method that simply return a new instance of the event model class (by default, a new event is
 generated every second).  The processor simply logs out message that the event was received and returns the event unmodified.  Lastly, the sink outputs that the 
 processor result was received.
+
+## Application Creation
+
+In many instances a streaming application will only play single role of either a source, processor, or sink.  You can use this accelerator to generate a project that plays
+one ore more roles, but typically you would create an application per role.  An example workflow would be:
+
+* Create a source application setting the `Event Source` channel, `Event Model`, and `Message Broker Name`
+* Create another application using the same settings but choosing `Event Processor` instead of `Event Source` and adding a setting for the `Event Source Group` channel group and `Event Result` channel.
+* Create another application using the same settings but choosing `Event Sink` instead of `Event Processor` and adding a setting for the `Event Result Group` channel.
+
+## TAP Deployment Guide
+
+The streaming sample connects to a RabbitMQ broker for sending and receiving messages.  You will need to create a `ClassClaim` that matches the name of the 
+`Message Broker Name` option.  To create the `ClassClaim` as well as a RabbitMQ instance, run the following command updating the <NAME> placeholder with the name
+of the message broker and the <WORKLAOD_NAMESPACE> with the name of the namespace where the application will be deployed.
+
+```
+tanzu service  class-claim  create  <NAME>  --class rabbitmq-unmanaged -n <WORKLAOD_NAMESPACE>
+```
+
+After the `ClassClaim` is created, you can build and deploy the application by navigating to the root directory of the accelerator generate project and run the following 
+command:
+
+```
+kubectl apply -f ./config/workload.yaml
+```

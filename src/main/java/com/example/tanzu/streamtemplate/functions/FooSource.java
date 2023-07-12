@@ -1,6 +1,7 @@
 package com.example.tanzu.streamtemplate.functions;
 
 import java.util.Collections;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import org.springframework.cloud.function.context.PollableBean;
@@ -20,6 +21,6 @@ public class FooSource
 	{
 		log.info("Supplier generating new {}",  Foo.class.getName());
 		
-		return () -> Flux.fromIterable(Collections.singletonList(new Foo()));
+		return () -> Flux.fromIterable(Collections.singletonList(new Foo("Test data: " + UUID.randomUUID().toString())));
 	}
 }
