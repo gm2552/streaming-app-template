@@ -9,18 +9,11 @@ metadata:
     apps.tanzu.vmware.com/has-tests: "true"
     apps.tanzu.vmware.com/auto-configure-actuators: "true"
     app.kubernetes.io/part-of: #@ data.values.projectName
-    networking.knative.dev/visibility: cluster-local    
 spec:
   build:
     env:
       - name: BP_JVM_VERSION
         value: "17"
-  params:
-  - name: annotations
-    value:
-      autoscaling.knative.dev/minScale: "1"
-      autoscaling.knative.dev/target: "200"
-      autoscaling.knative.dev/maxScale: "4"
   resources:     
     requests:         
       memory: "500M"
