@@ -111,8 +111,8 @@ engine:
     # Maven group updated
     - merge:
         - include: [ "**" ]
-          exclude: [ "pom.xml", "**/templates/application.yaml"]
-        - include: [ "pom.xml" ]       
+          exclude: [ "pom.xml", "**/templates/application.yaml", "**/catalog/catalog-info.yaml"]
+        - include: [ "pom.xml", "**/catalog/catalog-info.yaml"]       
           chain:
             - type: ReplaceText
               substitutions:

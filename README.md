@@ -31,7 +31,7 @@ The application accelerator generates a starter project based on selected config
 
 ## Project Layout
 
-The generated application will have the following layout; function classes will be generated based on selected applications traits:
+The generated application will have the following layout; function classes will be generated based on selected applications roles:
 
 ```
 pom.xml
@@ -60,8 +60,8 @@ In many instances a streaming application will only play single role of either a
 one ore more roles, but typically you would create an application per role.  An example workflow would be:
 
 * Create a source application setting the `Event Source` channel, `Event Model`, and `Message Broker Name`
-* Create another application using the same settings but choosing `Event Processor` instead of `Event Source` and adding a setting for the `Event Source Group` channel group and `Event Result` channel.
-* Create another application using the same settings but choosing `Event Sink` instead of `Event Processor` and adding a setting for the `Event Result Group` channel.
+* Create another application using the same settings but choosing `Event Processor` instead of `Event Source` and adding a setting for the `Event Source Group` channel group and `Event Result` channel.  You also need to change application name.
+* Create another application using the same settings but choosing `Event Sink` instead of `Event Processor` and adding a setting for the `Event Result Group` channel.  You also need to change application name.
 
 ## TAP Deployment Guide
 
@@ -77,5 +77,31 @@ After the `ClassClaim` is created, you can build and deploy the application by n
 command:
 
 ```
-kubectl apply -f ./config/workload.yaml
+tanzu apps workload create -f config/workload.yaml --local-path .
+```
+
+## Testing
+
+This testing scenario assumes that you have deployed the application with all three roles enabled.  This could be done in a single application, but typically will be spilt
+out into three seperate application performing a specific streaming role.
+
+The source application will emit a message everyone one second.  View the logs of the source application and confirm that you see a message similar to the following:
+
+```
+Supplier generating new com.example.tanzu.streamtemplate.model.Foo
+```
+
+The processor application will receive the message and pass it along unmodified to the sink.  View the logs of the source application and confirm that you see a message 
+similar to the following:
+
+```
+Processing incoming com.example.tanzu.streamtemplate.model.Foo
+```
+
+
+The sink application will receive the processed message and perform a no-op.  View the logs of the sink application and confirm that you see a message 
+similar to the following:
+
+```
+Storing incoming com.example.tanzu.streamtemplate.model.Foo in sink
 ```
